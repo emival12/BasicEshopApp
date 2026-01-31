@@ -1,5 +1,7 @@
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -9,8 +11,14 @@ import {
 } from "react-native";
 import { PRODUCTS } from "../../constants/products";
 
+const PAGE_SIZE = 10;
+
 export default function HomeScreen() {
   const router = useRouter();
+  const [visibleProducts, setVisibleProducts] = useState(
+    PRODUCTS.slice(0, PAGE_SIZE),
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const renderProduct = ({ item }: { item: any }) => (
     <TouchableOpacity
@@ -30,16 +38,38 @@ export default function HomeScreen() {
     </TouchableOpacity>
   );
 
+  const loadMore = () => {
+    if (isLoading || visibleProducts.length >= PRODUCTS.length) return;
+
+    setIsLoading(true);
+    setTimeout(() => {
+      const nextProducts = PRODUCTS.slice(
+        visibleProducts.length,
+        visibleProducts.length + PAGE_SIZE,
+      );
+      setVisibleProducts([...visibleProducts, ...nextProducts]);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const renderFooter = () => {
+    if (!isLoading) return null;
+    return (
+      <View style={{ paddingVertical: 20 }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={PRODUCTS}
+        data={visibleProducts}
         renderItem={renderProduct}
         keyExtractor={(item) => item.id.toString()}
-        onEndReached={() => {
-          console.log("Carico altri dati");
-        }}
+        onEndReached={loadMore}
         onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
       />
     </View>
   );
