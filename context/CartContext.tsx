@@ -1,19 +1,6 @@
+import { CartContextType, CartItem } from "@/types/types";
+import { calculateTotal } from "@/utils/cartUtils";
 import React, { createContext, useContext, useState } from "react";
-
-type CartItem = {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
-  quantity: number;
-};
-
-type CartContextType = {
-  items: CartItem[];
-  addToCart: (product: any, quantity: number) => void;
-  removeFromCart: (id: number) => void;
-  getTotalPrice: () => string;
-};
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -40,11 +27,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const getTotalPrice = () => {
-    const total = items.reduce(
-      (sum, item) => sum + parseFloat(item.price) * item.quantity,
-      0,
-    );
-    return total.toFixed(2);
+    return calculateTotal(items);
   };
 
   return (
