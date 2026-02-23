@@ -1,50 +1,70 @@
-# Welcome to your Expo app 👋
+# BasicEshopApp
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A  React Native e-commerce application built with Expo and TypeScript.
 
-## Get started
+Built as a deliberate learning exercise: after years of web development with React and LWC, I wanted to understand concretely how React paradigms translate to native mobile development, and where the two ecosystems diverge.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+| Layer | Technology |
+|---|---|
+| Framework | React Native (Expo) |
+| Language | TypeScript |
+| Routing | Expo Router (file-based) |
+| State Management | React Context API |
+| Testing | Jest |
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## Architecture
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+The project is structured to maintain a clean separation of concerns, even at this scale:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+├── app/              # File-based routing (Expo Router) — each file is a screen
+├── context/          # Global state (cart) via React Context API
+├── types/            # Shared TypeScript interfaces and type definitions
+├── utils/            # Pure utility functions
+├── constants/        # App-wide constants including mock product data
+└── __tests__/        # Unit tests
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## What I Transferred from Web Development
 
-To learn more about developing your project with Expo, look at the following resources:
+Coming from React and TypeScript on the web, several patterns carried over directly:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **Context API** for shared state — the same pattern I used in my React web projects, applied here for cart management across screens
+- **Custom hooks** to separate logic from presentation — a habit from building reusable components in enterprise environments
+- **TypeScript** across the full codebase, with shared interfaces in a dedicated `types/` folder
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## What I Found Different
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The most significant differences compared to web development:
+
+- **No CSS.** Styling is done entirely through `StyleSheet` objects. There is no cascade, no class inheritance, no selectors — every component is styled explicitly. This took adjustment.
+- **Layout defaults differently.** Flexbox is the only layout system, and the default `flexDirection` is `column` rather than `row`. Small difference, constant source of recalibration.
+- **The environment itself is the constraint.** On the web, the browser handles a lot silently. In React Native, you are more directly aware of the platform — safe area insets, keyboard behaviour, and scroll handling all require explicit attention in a way they don't on the web.
+
+---
+
+## Screens
+
+- **Product Listing** — scrollable grid of 50 products with availability state
+- **Product Detail** — individual product view with stock information
+- **Cart** — managed via Context API, persisted across navigation
+
+---
+
+## Scope and Honest Context
+
+This is a tutorial-level project. The data is static and locally generated — there is no backend. The goal was not to ship a product but to get enough hands-on experience with the React Native ecosystem to understand what building a real mobile application would involve.
+
+It is intentionally simple. The value is in the familiarity gained, not the features built.
+
+
